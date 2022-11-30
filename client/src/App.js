@@ -5,6 +5,11 @@ import Signup from "./components/signup";
 import Login from "./components/login";
 import Access from "./components/access";
 import Admin from "./components/admin";
+import Visitor from "./components/visitor";
+import Viewrequests from "./components/viewrequests"
+import Viewrequestsadmin from "./components/viewrequestsadmin";
+import Vehicle from "./components/vehicle";
+import Resetpassword from "./components/resetpassword"
 
 
 
@@ -22,6 +27,21 @@ export default function App() {
       </Routes>
       <Routes>
         <Route path="admin" element={<Admin/>} />
+      </Routes>
+      <Routes>
+        <Route path="visitor" element={<Visitor/>} />
+      </Routes>
+      <Routes>
+        <Route path="vehicle" element={<Vehicle/>} />
+      </Routes>
+      <Routes>
+        <Route path="viewrequests" element={<Viewrequests/>} />
+      </Routes>
+      <Routes>
+        <Route path="viewrequestsadmin" element={<Viewrequestsadmin/>} />
+      </Routes>
+      <Routes>
+        <Route path="resetpassword" element={<Resetpassword/>} />
       </Routes>
     </BrowserRouter>
     );
