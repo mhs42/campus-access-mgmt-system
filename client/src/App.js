@@ -9,13 +9,16 @@ import Visitor from "./components/visitor";
 import Viewrequests from "./components/viewrequests"
 import Viewrequestsadmin from "./components/viewrequestsadmin";
 import Vehicle from "./components/vehicle";
-import Resetpassword from "./components/resetpassword"
-
+import Resetpassword from "./components/resetpassword";
+import Ta from "./components/ta";
 
 
 export default function App() {
     return (
     <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Signup/>} />
+      </Routes>
       <Routes>
         <Route path="signup" element={<Signup/>} />
       </Routes>
@@ -42,6 +45,9 @@ export default function App() {
       </Routes>
       <Routes>
         <Route path="resetpassword" element={<Resetpassword/>} />
+      </Routes>
+      <Routes>
+        <Route path="ta" element={<Ta/>} />
       </Routes>
     </BrowserRouter>
     );

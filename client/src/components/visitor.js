@@ -14,6 +14,17 @@ const Visitor=()=> {
     window.location.replace("/login")
   }
 
+  const main =(data) =>{
+    window.location.replace("/access")
+  }
+
+  useEffect(() => {
+    if(!localStorage.getItem("token")){
+      alert("Login first");
+      window.location.replace("/login");
+    }
+  });
+
   async function visit() {
     try {
         console.log("In try");
@@ -43,6 +54,7 @@ const Visitor=()=> {
   return (
     <div className="App">
         <button onClick={lgout}>logout</button>
+        <button onClick={main}>main</button>
       <div className="visitor">
         <h1>VISITOR</h1>
         <label>visitorname</label>

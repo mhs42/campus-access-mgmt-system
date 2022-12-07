@@ -16,10 +16,6 @@ const Access=()=> {
     window.location.href = "/visitor";
   }
 
-  const reset =(data) =>{
-    window.location.href = "/resetpassword";
-  }
-
   const rqst_v =(data) =>{
     window.location.href = "/vehicle";
   }
@@ -34,7 +30,9 @@ const Access=()=> {
       alert("Login first");
       window.location.replace("/login");
     }
-    fetchAccess();
+    else{
+      fetchAccess();
+    }
   }, "");
   async function fetchAccess() {
     try {
@@ -62,7 +60,6 @@ const Access=()=> {
       <button onClick={rqst}>request-Visitor</button>
       <button onClick={rqst_v}>request-Vehicle</button>
       <button onClick={v_rqst}>view-requests</button>
-      <button onClick={reset}>reset-pass</button>
       <div className="access">
         <h1>{acc}</h1>
       </div>

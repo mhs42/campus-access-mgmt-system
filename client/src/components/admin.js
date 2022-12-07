@@ -1,12 +1,15 @@
 import React, { useEffect, useState,Component } from "react";
 import './admin.css';
 import Axios from 'axios';
+import { Link, useNavigate } from "react-router-dom";
 
 
 
 
 const Admin=()=> {
 
+
+  const navigate = useNavigate();
 
   const lgout =(data) =>{
     localStorage.clear()
@@ -65,13 +68,26 @@ const Admin=()=> {
   }
 
 
+  async function regg1(id){
+    console.log("inside regg1 hha");
+    let ind = id.currentTarget.dataset.index;
+    console.log(ind);
+    navigate("/ta", {
+      state:{
+        id: ind,
+      }
+    });
+  }
+
   const [admin, Setadmin] = useState([]);
   useEffect(() => {
     if(!localStorage.getItem("token")){
       alert("Login first");
       window.location.replace("/login");
     }
-    fetchAdmin();
+    else{
+      fetchAdmin();
+    }
   }, []);
   async function fetchAdmin() {
     try {
@@ -98,7 +114,9 @@ const Admin=()=> {
           <th>user</th>
           <th>occupation</th>
           <th>state</th>
-          <th>change status</th>
+          <th>change</th>
+          <th>delete</th>
+          <th>TAs</th>
         </tr>
         {admin.map((item, index) => (
           <tr key={index}>
@@ -107,6 +125,7 @@ const Admin=()=> {
             <td>{item.state}</td>
             <td><button data-index={[item.username,item.state]} onClick={reg}>change</button></td>
             <td><button data-index={[item.username]} onClick={regg}>delete</button></td>
+            <td><button data-index={[item.username]} onClick={regg1}>TA</button></td>
           </tr>
         ))}
       </tbody>

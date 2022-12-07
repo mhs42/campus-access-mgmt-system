@@ -127,7 +127,9 @@ const Viewrequestsadmin=()=> {
       alert("Login first");
       window.location.replace("/login");
     }
-    fetchvisitors();
+    else{
+      fetchvisitors();
+    }
   }, []);
   async function fetchvisitors() {
     try {
@@ -155,6 +157,8 @@ const Viewrequestsadmin=()=> {
           <th>visitor</th>
           <th>cnic</th>
           <th>state</th>
+          <th>change</th>
+          <th>delete</th>
         </tr>
         {admin.map((item, index) => (
           <tr key={index}>
@@ -174,6 +178,8 @@ const Viewrequestsadmin=()=> {
           <th>vehicle</th>
           <th>plate</th>
           <th>state</th>
+          <th>change</th>
+          <th>delete</th>
         </tr>
         {veh.map((item, index) => (
           <tr key={index}>

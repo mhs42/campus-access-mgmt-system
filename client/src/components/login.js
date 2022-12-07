@@ -11,6 +11,13 @@ function Login() {
   const [usr,setusr] = useState('')
   const [pass,setpass] = useState('')
 
+  const signup =(data) =>{
+    window.location.replace("/signup");
+  }
+  const reset =(data) =>{
+    window.location.replace("/resetpassword");
+  }
+
   const reg =(data) =>{
       const response = Axios.post('http://localhost:5000/login', {
         usrname: usr, 
@@ -33,6 +40,8 @@ function Login() {
 }
   return (
     <div className="App">
+      <button onClick={signup}>signup</button>
+      <button onClick={reset}>reset-pass</button>
       <div className="Login">
         <h1>Login</h1>
         <label>username</label>

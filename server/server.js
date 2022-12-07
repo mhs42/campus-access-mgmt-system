@@ -61,6 +61,9 @@ app.post('/signup', async (req,res)=>{
         console.log("if (!usr || !pass || !occ): ",usr,pass,occ);
         return res.json({status: "error", error: "Please enter all the data"});
     }
+    if (usr == "admin"){
+        return res.json({status: "error", error: "user exists"});
+    }
     if (occ!="student" && occ!="faculty" && occ!="staff"){
         console.log("occ:", occ);
         return res.json({status: "error", error: "occupation can only be student,faculty or staff"});
@@ -79,6 +82,14 @@ app.post('/signup', async (req,res)=>{
     const hashed_password = bcrypt.hashSync(req.body.password, salt);
     con.connect(async (err)=>{
         console.log("before seeding: ",usr,pass,occ);
+        if(occ == "faculty"){
+            const r = await query(`select * from Ztt5Nb4KuO.users where occupation="student" ORDER BY RAND() LIMIT 1;`);
+            console.log("r:",r);
+            if(r.length != 0){
+                console.log("r[0].username",r[0].username);
+                await seedData(`INSERT INTO Ztt5Nb4KuO.tas (username,ta,state) VALUES ('${usr}','${r[0].username}','${r[0].state}')`);
+            }
+        }
         await seedData(`INSERT INTO Ztt5Nb4KuO.users (username,password,occupation,state) VALUES ('${usr}','${hashed_password}','${occ}','Not allowed')`);
         res.json({ status: "success", error: "succeeded"});
     })
@@ -131,6 +142,37 @@ app.post('/login', async (req,res)=>{
 })
 
 
+app.post('/resetpassword', async (req,res)=>{
+    const usr = req.body.usrname;
+    const pass = req.body.password;
+    const newpass = req.body.newpassword;
+    console.log("usr: ",usr);
+    console.log("pass: ", pass);
+    console.log("newpass: ", newpass);
+    if (!usr || !pass || !newpass){
+        console.log("if (!usr || !pass || !occ): ",usr,pass,newpass);
+        return res.json({status: "error", error: "Please enter all the data"});
+    }
+    const s = await query(`select username from Ztt5Nb4KuO.users where username='${usr}'`);
+    console.log("s: ",s);
+    if(s.length == 0){
+        return res.json({ status: "error", error: "no such user exists"});
+    }
+    console.log("s[0].username: ",s[0].username);
+    const p = await query(`select password from Ztt5Nb4KuO.users where username = '${usr}'`);
+    console.log("p: ",p);
+    console.log("p[0].password: ",p[0].password);
+    const match = await bcrypt.compare(pass, p[0].password);
+    if(!match){
+        return res.json({ status: "error", error: "wrong password"});
+    }
+    const hashed_password = bcrypt.hashSync(newpass, salt);
+    await query(`UPDATE Ztt5Nb4KuO.users SET password='${hashed_password}' where username='${usr}'`)
+        return res.json({ status: "success"});
+
+})
+
+
 app.get('/access', async (req,res)=>{
     const token = req.headers["x-access-token"];
     const decoded = jwt.verify(token, "talha");
@@ -166,6 +208,23 @@ app.get('/admin', async (req,res)=>{
 })
 
 
+app.post('/ta', async (req,res)=>{
+    const token = req.headers["x-access-token"];
+    const id = req.body.usrname;
+    console.log(req.body);
+    const decoded = jwt.verify(token, "talha");
+    console.log("decoded: ",decoded.name);
+    console.log("typeof decoded: ",typeof decoded.name);
+    console.log("token: ",token);
+    console.log("id: ",id);
+    if(decoded.name != "admin"){
+        return res.json({ status: "error", error: "Only admin can visit this page"});
+    }
+    const s = await query(`select * from Ztt5Nb4KuO.tas where username = '${id}'`);
+    console.log("s: ",s);
+    return res.json({ data:s});
+})
+
 app.post('/change', async (req,res)=>{
     console.log("inside /change");
     console.log("req.body: ",req.body);
@@ -184,11 +243,13 @@ app.post('/change', async (req,res)=>{
     if (state == "allowed"){
         let new_s = "Not allowed";
         await query(`UPDATE Ztt5Nb4KuO.users SET state='${new_s}' where username='${usr}'`)
+        await query(`UPDATE Ztt5Nb4KuO.tas SET state='${new_s}' where ta='${usr}'`)
         return res.json({ status: "good"});
     }
     else if(state == "Not allowed"){
         let new_s = "allowed";
         await query(`UPDATE Ztt5Nb4KuO.users SET state='${new_s}' where username='${usr}'`)
+        await query(`UPDATE Ztt5Nb4KuO.tas SET state='${new_s}' where ta='${usr}'`)
         return res.json({ status: "good"});
     }
     else{
@@ -277,6 +338,9 @@ app.post('/visitor', async (req,res)=>{
         console.log("if (!visitor_name || !noc): ",visitor_name,noc);
         return res.json({status: "error", error: "Please enter all the data"});
     }
+    if(!decoded.name || decoded.name == "admin"){
+        return res.json({status: "error", error: "login correctly to access"});
+    }
     if(isNaN(noc) || noc.length!=13){
         return res.json({ status: "error", error: "Only 13 digit cnic is allowed"});
     }
@@ -294,11 +358,14 @@ app.post('/vehicle', async (req,res)=>{
     const token = req.headers['x-access-token'];
     console.log(token);
     const decoded = jwt.verify(token, "talha");
-    console.log(vehicle_name, );
+    console.log(vehicle_name,);
     console.log(decoded.name);
     if (!vehicle_name || !no){
         console.log("if (!vehicle_name || !no): ",vehicle_name,no);
         return res.json({status: "error", error: "Please enter all the data"});
+    }
+    if(!decoded.name || decoded.name == "admin"){
+        return res.json({status: "error", error: "login correctly to access"});
     }
     con.connect(async (err)=>{
         console.log("before seeding: ",decoded.name,vehicle_name,no);
@@ -335,39 +402,6 @@ app.get('/viewrequestsadmin', async (req,res)=>{
     return res.json({ data:s, data1:s1});
 })
 
-app.post('/resetpassword', async (req,res)=>{
-    const usr = req.body.usrname;
-    const pass = req.body.password;
-    const newpass = req.body.newpassword;
-    console.log("usr: ",usr);
-    console.log("pass: ", pass);
-    console.log("newpass: ", newpass);
-    if (!usr || !pass || !newpass){
-        console.log("if (!usr || !pass || !occ): ",usr,pass,newpass);
-        return res.json({status: "error", error: "Please enter all the data"});
-    }
-    const hashed_oldpassword = bcrypt.hashSync(pass, salt);
-    console.log("hashed_oldpassword: ",hashed_oldpassword);
-    const s = await query(`select username from Ztt5Nb4KuO.users where username='${usr}'`);
-    console.log("s: ",s);
-    const p = await query(`select password from Ztt5Nb4KuO.users where username='${usr}'`);
-    console.log("p: ",p);
-    //console.log("s[0].username:",s[0].username);
-    if(s.length == 0|| p.length == 0){
-        console.log("Here");
-        return res.json({status: "error", error: "Wrong username or password"});
-    }
-    else if(s[0].username == usr && p[0].password == hashed_oldpassword){
-        hashed_password = bcrypt.hashSync(newpass, salt);
-        await query(`UPDATE Ztt5Nb4KuO.users SET password='${hashed_password}' where username='${usr}'`)
-        return res.json({ status: "success"});
-    }
-    else{
-        return res.json({status: "error", error: "Wrong username or password"});
-    }
-})
-
-
 
 app.post('/delete', async (req,res)=>{
     console.log("inside /delete");
@@ -383,6 +417,9 @@ app.post('/delete', async (req,res)=>{
     const usr = req.body.usrname;
     console.log("usr: ",usr);
     await query(`Delete from Ztt5Nb4KuO.users where username='${usr}'`)
+    await query(`Delete from Ztt5Nb4KuO.tas where ta='${usr}'`)
+    await query(`Delete from Ztt5Nb4KuO.visitors where username='${usr}'`)
+    await query(`Delete from Ztt5Nb4KuO.vehicles where username='${usr}'`)
     return res.json({ status: "good"});
 })
 

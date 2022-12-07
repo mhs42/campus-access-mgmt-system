@@ -13,6 +13,16 @@ const Vehicle=()=> {
     localStorage.clear()
     window.location.replace("/login")
   }
+  const main =(data) =>{
+    window.location.replace("/access")
+  }
+
+  useEffect(() => {
+    if(!localStorage.getItem("token")){
+      alert("Login first");
+      window.location.replace("/login");
+    }
+  });
 
   async function visit() {
     try {
@@ -43,8 +53,9 @@ const Vehicle=()=> {
   return (
     <div className="App">
         <button onClick={lgout}>logout</button>
+        <button onClick={main}>main</button>
       <div className="visitor">
-        <h1>VISITOR</h1>
+        <h1>VEHICLE</h1>
         <label>vehiclename</label>
         <input type="text" onChange = {(e)=>{setname(e.target.value)}}/>
         <label>plateno</label>

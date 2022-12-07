@@ -23,7 +23,9 @@ const Viewrequests=()=> {
       alert("Login first");
       window.location.replace("/login");
     }
-    fetchAdmin();
+    else{
+      fetchAdmin();
+    }
   }, []);
   async function fetchAdmin() {
     try {
