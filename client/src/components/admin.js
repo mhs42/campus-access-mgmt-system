@@ -79,6 +79,17 @@ const Admin=()=> {
     });
   }
 
+  async function reggg1(id){
+    console.log("inside regg1 hha");
+    let ind = id.currentTarget.dataset.index;
+    console.log(ind);
+    navigate("/facility", {
+      state:{
+        id: ind,
+      }
+    });
+  }
+
   const [admin, Setadmin] = useState([]);
   useEffect(() => {
     if(!localStorage.getItem("token")){
@@ -117,6 +128,7 @@ const Admin=()=> {
           <th>change</th>
           <th>delete</th>
           <th>TAs</th>
+          <th>facility</th>
         </tr>
         {admin.map((item, index) => (
           <tr key={index}>
@@ -126,6 +138,7 @@ const Admin=()=> {
             <td><button data-index={[item.username,item.state]} onClick={reg}>change</button></td>
             <td><button data-index={[item.username]} onClick={regg}>delete</button></td>
             <td><button data-index={[item.username]} onClick={regg1}>TA</button></td>
+            <td><button data-index={[item.username]} onClick={reggg1}>facility</button></td>
           </tr>
         ))}
       </tbody>

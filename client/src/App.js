@@ -11,6 +11,7 @@ import Viewrequestsadmin from "./components/viewrequestsadmin";
 import Vehicle from "./components/vehicle";
 import Resetpassword from "./components/resetpassword";
 import Ta from "./components/ta";
+import Facility from "./components/facility";
 
 
 export default function App() {
@@ -48,6 +49,9 @@ export default function App() {
       </Routes>
       <Routes>
         <Route path="ta" element={<Ta/>} />
+      </Routes>
+      <Routes>
+        <Route path="facility" element={<Facility/>} />
       </Routes>
     </BrowserRouter>
     );

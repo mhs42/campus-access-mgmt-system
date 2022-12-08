@@ -38,6 +38,6 @@ function createTable(CreateQuerry)
 
 con.connect((error)=>
 {
-    createTable('CREATE TABLE tas (username VARCHAR(255),ta VARCHAR(255),state VARCHAR(255))');
+    createTable('CREATE TABLE facilities (username VARCHAR(255),gym VARCHAR(255),library VARCHAR(255))');
     con.end();
 });

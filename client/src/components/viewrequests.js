@@ -70,6 +70,7 @@ const Viewrequests=()=> {
           <th>vehicle</th>
           <th>plate</th>
           <th>state</th>
+          <th>item</th>
         </tr>
         {veh.map((item, index) => (
           <tr key={index}>
@@ -77,6 +78,7 @@ const Viewrequests=()=> {
             <td>{item.vehiclename}</td>
             <td>{item.plateno}</td>
             <td>{item.state}</td>
+            <td>{item.item}</td>
           </tr>
         ))}
       </tbody>

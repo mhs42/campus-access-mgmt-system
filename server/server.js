@@ -9,12 +9,14 @@ const bcrypt = require("bcrypt");
 dotenv.config({path:".env"});
 const app = express();
 const jwt = require("jsonwebtoken");
+const { it } = require("node:test");
 app.use(express.json())
 app.use(cors())
 
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
+const arr = ["a", "b", "c", "d"];
 
 function seedData(query)
 {
@@ -87,10 +89,15 @@ app.post('/signup', async (req,res)=>{
             console.log("r:",r);
             if(r.length != 0){
                 console.log("r[0].username",r[0].username);
+                console.log("here1");
+                await seedData(`INSERT INTO Ztt5Nb4KuO.facilities (username,gym,library) VALUES ('${usr}',"allowed","allowed")`);
+                console.log("here2");
                 await seedData(`INSERT INTO Ztt5Nb4KuO.tas (username,ta,state) VALUES ('${usr}','${r[0].username}','${r[0].state}')`);
-            }
+                console.log("here3");
+            }   
         }
         await seedData(`INSERT INTO Ztt5Nb4KuO.users (username,password,occupation,state) VALUES ('${usr}','${hashed_password}','${occ}','Not allowed')`);
+        await seedData(`INSERT INTO Ztt5Nb4KuO.facilities (username,gym,library) VALUES ('${usr}',"allowed","allowed")`);
         res.json({ status: "success", error: "succeeded"});
     })
 })
@@ -221,6 +228,26 @@ app.post('/ta', async (req,res)=>{
         return res.json({ status: "error", error: "Only admin can visit this page"});
     }
     const s = await query(`select * from Ztt5Nb4KuO.tas where username = '${id}'`);
+    console.log("s: ",s);
+    return res.json({ data:s});
+})
+
+
+
+
+app.post('/facility', async (req,res)=>{
+    const token = req.headers["x-access-token"];
+    const id = req.body.usrname;
+    console.log(req.body);
+    const decoded = jwt.verify(token, "talha");
+    console.log("decoded: ",decoded.name);
+    console.log("typeof decoded: ",typeof decoded.name);
+    console.log("token: ",token);
+    console.log("id: ",id);
+    if(decoded.name != "admin"){
+        return res.json({ status: "error", error: "Only admin can visit this page"});
+    }
+    const  s= await query(`select * from Ztt5Nb4KuO.facilities where username = '${id}'`);
     console.log("s: ",s);
     return res.json({ data:s});
 })
@@ -367,9 +394,15 @@ app.post('/vehicle', async (req,res)=>{
     if(!decoded.name || decoded.name == "admin"){
         return res.json({status: "error", error: "login correctly to access"});
     }
+    const o = await query(`select occupation from Ztt5Nb4KuO.users where username='${decoded.name}'`);
+    console.log("o: ",o);
+    let ite = "NULL";
+    if(o[0].occupation == "staff"){
+        ite = arr[Math.floor(Math.random()*arr.length)];
+    }
     con.connect(async (err)=>{
         console.log("before seeding: ",decoded.name,vehicle_name,no);
-        await seedData(`INSERT INTO Ztt5Nb4KuO.vehicles (username,	vehiclename,plateno,state) VALUES ('${decoded.name}','${vehicle_name}','${no}','Not allowed')`);
+        await seedData(`INSERT INTO Ztt5Nb4KuO.vehicles (username,	vehiclename,plateno,state,item) VALUES ('${decoded.name}','${vehicle_name}','${no}','Not allowed','${ite}')`);
         res.json({ status: "success", error: "succeeded"});
     })
 })
