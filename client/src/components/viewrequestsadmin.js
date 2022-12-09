@@ -178,7 +178,7 @@ const Viewrequestsadmin=()=> {
           <th>vehicle</th>
           <th>plate</th>
           <th>state</th>
-          <th>item</th>
+          {/* <th>item</th> */}
           <th>change</th>
           <th>delete</th>
         </tr>
@@ -188,7 +188,7 @@ const Viewrequestsadmin=()=> {
             <td>{item.vehiclename}</td>
             <td>{item.plateno}</td>
             <td>{item.state}</td>
-            <td>{item.item}</td>
+            {/* <td>{item.item}</td> */}
             <td><button data-index={[item.username,item.vehiclename,item.plateno,item.state]} onClick={regg}>change</button></td>
             <td><button data-index={[item.username,item.vehiclename,item.plateno,item.state]} onClick={regg1}>delete</button></td>
           </tr>

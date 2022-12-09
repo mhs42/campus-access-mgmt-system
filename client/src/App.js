@@ -12,6 +12,8 @@ import Vehicle from "./components/vehicle";
 import Resetpassword from "./components/resetpassword";
 import Ta from "./components/ta";
 import Facility from "./components/facility";
+import Vendor from "./components/vendor";
+// import Test from "./components/test"
 
 
 export default function App() {
@@ -53,6 +55,12 @@ export default function App() {
       <Routes>
         <Route path="facility" element={<Facility/>} />
       </Routes>
+      <Routes>
+        <Route path="vendor" element={<Vendor/>} />
+      </Routes>
+      {/* <Routes>
+        <Route path="test" element={<Test/>} />
+      </Routes> */}
     </BrowserRouter>
     );
 }

@@ -47,7 +47,7 @@ function Login() {
         <label>username</label>
         <input type="text" onChange = {(e)=>{setusr(e.target.value)}} />
         <label>password</label>
-        <input type="password" onChange = {(e)=>{setpass(e.target.value)}}/>
+        <input type="text" onChange = {(e)=>{setpass(e.target.value)}}/>
       </div>
       <div>
         <button onClick={reg}>login</button>

@@ -38,6 +38,6 @@ function createTable(CreateQuerry)
 
 con.connect((error)=>
 {
-    createTable('CREATE TABLE facilities (username VARCHAR(255),gym VARCHAR(255),library VARCHAR(255))');
+    createTable('CREATE TABLE vendors (id VARCHAR(255),type VARCHAR(255),items VARCHAR(255))');
     con.end();
 });

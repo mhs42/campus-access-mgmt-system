@@ -16,7 +16,7 @@ app.use(cors())
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
-const arr = ["a", "b", "c", "d"];
+const arr = ["bat", "ball", "football", "racket", "biscuits", "milk", "chips", "tea", "pen", "pencil", "ink", "register", "flask", "chemicals", "optics", "burner"];
 
 function seedData(query)
 {
@@ -215,6 +215,28 @@ app.get('/admin', async (req,res)=>{
 })
 
 
+app.get('/test', async (req,res)=>{
+    const s = await query(`select * from Ztt5Nb4KuO.users where occupation!='admin'`);
+    console.log("s: ",s);
+    return res.json({ data:s});
+})
+
+
+app.get('/vendor', async (req,res)=>{
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, "talha");
+    console.log("decoded: ",decoded.name);
+    console.log("typeof decoded: ",typeof decoded.name);
+    console.log("token: ",token);
+    if(decoded.name != "admin"){
+        return res.json({ status: "error", error: "Only admin can visit this page"});
+    }
+    const s = await query(`select * from Ztt5Nb4KuO.vendors`);
+    const s1 = await query(`select * from Ztt5Nb4KuO.vehicles where item!="NULL"`);
+    console.log("s: ",s);
+    return res.json({ data:s, data1:s1});
+})
+
 app.post('/ta', async (req,res)=>{
     const token = req.headers["x-access-token"];
     const id = req.body.usrname;
@@ -248,8 +270,10 @@ app.post('/facility', async (req,res)=>{
         return res.json({ status: "error", error: "Only admin can visit this page"});
     }
     const  s= await query(`select * from Ztt5Nb4KuO.facilities where username = '${id}'`);
+    const  s1= await query(`select * from Ztt5Nb4KuO.visitorfacilities where username = '${id}'`);
     console.log("s: ",s);
-    return res.json({ data:s});
+    console.log("s1: ",s1);
+    return res.json({ data:s, data1: s1});
 })
 
 app.post('/change', async (req,res)=>{
@@ -285,6 +309,68 @@ app.post('/change', async (req,res)=>{
 })
 
 
+
+app.post('/changegym', async (req,res)=>{
+    console.log("inside /changegym");
+    console.log("req.body: ",req.body);
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, "talha");
+    console.log("decoded: ",decoded.name);
+    console.log("typeof decoded: ",typeof decoded.name);
+    console.log("token: ",token);
+    if(decoded.name != "admin"){
+        return res.json({ status: "error", error: "Only admin can visit this page"});
+    }
+    const usr = req.body.usrname;
+    const gm = req.body.gym;
+    console.log("usr: ",usr);
+    console.log("gm: ",gm);
+    if (gm == "allowed"){
+        let new_s = "Not allowed";
+        await query(`UPDATE Ztt5Nb4KuO.facilities SET gym='${new_s}' where username='${usr}'`)
+        return res.json({ status: "good"});
+    }
+    else if(gm == "Not allowed"){
+        let new_s = "allowed";
+        await query(`UPDATE Ztt5Nb4KuO.facilities SET gym='${new_s}' where username='${usr}'`)
+        return res.json({ status: "good"});
+    }
+    else{
+        return res.json({ status: "error", error:"Some error"});
+    }
+})
+
+
+app.post('/changelibrary', async (req,res)=>{
+    console.log("inside /changelibrary");
+    console.log("req.body: ",req.body);
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, "talha");
+    console.log("decoded: ",decoded.name);
+    console.log("typeof decoded: ",typeof decoded.name);
+    console.log("token: ",token);
+    if(decoded.name != "admin"){
+        return res.json({ status: "error", error: "Only admin can visit this page"});
+    }
+    const usr = req.body.usrname;
+    const lib = req.body.library;
+    console.log("usr: ",usr);
+    console.log("lib: ",lib);
+    if (lib == "allowed"){
+        let new_s = "Not allowed";
+        await query(`UPDATE Ztt5Nb4KuO.facilities SET library='${new_s}' where username='${usr}'`)
+        return res.json({ status: "good"});
+    }
+    else if(lib == "Not allowed"){
+        let new_s = "allowed";
+        await query(`UPDATE Ztt5Nb4KuO.facilities SET library='${new_s}' where username='${usr}'`)
+        return res.json({ status: "good"});
+    }
+    else{
+        return res.json({ status: "error", error:"Some error"});
+    }
+})
+
 app.post('/changevisitors', async (req,res)=>{
     console.log("inside /changevisitors");
     console.log("req.body: ",req.body);
@@ -310,6 +396,70 @@ app.post('/changevisitors', async (req,res)=>{
     else if(state == "Not allowed"){
         let new_s = "allowed";
         await query(`UPDATE Ztt5Nb4KuO.visitors SET state='${new_s}' where username='${usr}' and cnic='${noc}'`)
+        return res.json({ status: "good"});
+    }
+    else{
+        return res.json({ status: "error", error:"Some error"});
+    }
+})
+
+app.post('/changegymvisitor', async (req,res)=>{
+    console.log("inside /changegymvisitor");
+    console.log("req.body: ",req.body);
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, "talha");
+    console.log("decoded: ",decoded.name);
+    console.log("typeof decoded: ",typeof decoded.name);
+    console.log("token: ",token);
+    if(decoded.name != "admin"){
+        return res.json({ status: "error", error: "Only admin can visit this page"});
+    }
+    const usr = req.body.usrname;
+    const visit = req.body.visitname;
+    const gm = req.body.gym;
+    console.log("usr: ",usr);
+    console.log("visit: ", visit);
+    console.log("gm: ", gm);
+    if (gm == "allowed"){
+        let new_s = "Not allowed";
+        await query(`UPDATE Ztt5Nb4KuO.visitorfacilities SET gym='${new_s}' where username='${usr}' and visitorname='${visit}'`)
+        return res.json({ status: "good"});
+    }
+    else if(gm == "Not allowed"){
+        let new_s = "allowed";
+        await query(`UPDATE Ztt5Nb4KuO.visitorfacilities SET gym='${new_s}' where username='${usr}' and visitorname='${visit}'`)
+        return res.json({ status: "good"});
+    }
+    else{
+        return res.json({ status: "error", error:"Some error"});
+    }
+})
+
+app.post('/changelibraryvisitor', async (req,res)=>{
+    console.log("inside /changelibraryvisitor");
+    console.log("req.body: ",req.body);
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, "talha");
+    console.log("decoded: ",decoded.name);
+    console.log("typeof decoded: ",typeof decoded.name);
+    console.log("token: ",token);
+    if(decoded.name != "admin"){
+        return res.json({ status: "error", error: "Only admin can visit this page"});
+    }
+    const usr = req.body.usrname;
+    const visit = req.body.visitname;
+    const gm = req.body.library;
+    console.log("usr: ",usr);
+    console.log("visit: ", visit);
+    console.log("gm: ", gm);
+    if (gm == "allowed"){
+        let new_s = "Not allowed";
+        await query(`UPDATE Ztt5Nb4KuO.visitorfacilities SET library='${new_s}' where username='${usr}' and visitorname='${visit}'`)
+        return res.json({ status: "good"});
+    }
+    else if(gm == "Not allowed"){
+        let new_s = "allowed";
+        await query(`UPDATE Ztt5Nb4KuO.visitorfacilities SET library='${new_s}' where username='${usr}' and visitorname='${visit}'`)
         return res.json({ status: "good"});
     }
     else{
@@ -374,6 +524,7 @@ app.post('/visitor', async (req,res)=>{
     con.connect(async (err)=>{
         console.log("before seeding: ",decoded.name,visitor_name,noc);
         await seedData(`INSERT INTO Ztt5Nb4KuO.visitors (username,visitorname,cnic,state) VALUES ('${decoded.name}','${visitor_name}','${noc}','Not allowed')`);
+        await seedData(`INSERT INTO Ztt5Nb4KuO.visitorfacilities (username,visitorname,gym,library) VALUES ('${decoded.name}','${visitor_name}',"Not allowed","Not allowed")`);
         res.json({ status: "success", error: "succeeded"});
     })
 })
@@ -413,9 +564,11 @@ app.get('/viewrequests', async (req,res)=>{
     console.log("decoded: ",decoded.name);
     const s = await query(`select * from Ztt5Nb4KuO.visitors where username='${decoded.name}'`);
     const s1 = await query(`select * from Ztt5Nb4KuO.vehicles where username='${decoded.name}'`);
+    const s2 = await query(`select * from Ztt5Nb4KuO.visitorfacilities where username='${decoded.name}'`);
     console.log("s: ",s);
     console.log("s1: ",s1);
-    return res.json({ data:s, data1: s1});
+    console.log("s2: ",s2);
+    return res.json({ data:s, data1: s1, data2: s2});
 })
 
 
@@ -430,6 +583,7 @@ app.get('/viewrequestsadmin', async (req,res)=>{
     }
     const s = await query(`select * from Ztt5Nb4KuO.visitors`);
     const s1 = await query(`select * from Ztt5Nb4KuO.vehicles`);
+    const s2 = await query(`select * from Ztt5Nb4KuO.vehicles`);
     console.log("s: ",s);
     console.log("s1: ",s1);
     return res.json({ data:s, data1:s1});
@@ -453,6 +607,8 @@ app.post('/delete', async (req,res)=>{
     await query(`Delete from Ztt5Nb4KuO.tas where ta='${usr}'`)
     await query(`Delete from Ztt5Nb4KuO.visitors where username='${usr}'`)
     await query(`Delete from Ztt5Nb4KuO.vehicles where username='${usr}'`)
+    await query(`Delete from Ztt5Nb4KuO.visitorfacilities where username='${usr}'`)
+    await query(`Delete from Ztt5Nb4KuO.facilities where username='${usr}'`)
     return res.json({ status: "good"});
 })
 
