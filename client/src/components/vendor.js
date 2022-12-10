@@ -58,73 +58,48 @@ const Vendor=(props)=> {
       }
 
     return (
-      <div className="App">
-        <nav class="navbar navbar-light bg-light">
-          <span class="navbar-brand mb-0 h1">
-            Campus Access Managment System
-          </span>
-          <div>
-            <button class="btn btn-secondary" onClick={v_admin}>
-              admin
-            </button>
-            <button class="btn btn-secondary" onClick={v_rqst}>
-              view-requests-admin
-            </button>
-
-            <button class="btn btn-outline-danger" onClick={lgout}>
-              Logout
-            </button>
-          </div>
-        </nav>
-        {/* <button onClick={lgout}>logout</button>
+        <div className="App">
+        <button onClick={lgout}>logout</button>
         <button onClick={v_rqst}>view-requests-admin</button>
-        <button onClick={v_admin}>admin</button> */}
-        <div class="col-xl-10 offset-xl-1">
-          <div class="mt-5"></div>
-          <h4>Vendors</h4>
-          <table class="table table-striped">
-            <tbody>
-              <tr>
-                <th>vendor-id</th>
-                <th>type</th>
-                <th>items</th>
-              </tr>
-              {vendor.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.id}</td>
-                  <td>{item.type}</td>
-                  <td>{item.items}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div class="mt-5"></div>
-          <h4>Vehiles with Items</h4>
-          <table class="table table-striped">
-            <tbody>
-              <tr>
-                <th>user</th>
-                <th>vehicle</th>
-                <th>plate</th>
-                <th>state</th>
-                <th>item</th>
-                <th>vendor-id</th>
-                <th>type</th>
-              </tr>
-              {car.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.username}</td>
-                  <td>{item.vehiclename}</td>
-                  <td>{item.plateno}</td>
-                  <td>{item.state}</td>
-                  <td>{item.item}</td>
-                  <td>{item.id}</td>
-                  <td>{item.type}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <button onClick={v_admin}>admin</button>
+        <h1>VENDORS</h1>
+        <tbody>
+          <tr>
+            <th>vendor-id</th>
+            <th>type</th>
+            <th>items</th>
+          </tr>
+          {vendor.map((item, index) => (
+            <tr key={index}>
+              <td>{item.id}</td>
+              <td>{item.type}</td>
+              <td>{item.items}</td>
+            </tr>
+          ))}
+        </tbody>
+        <h1>VEHICLES WITH ITEMS</h1>
+        <tbody>
+          <tr>
+            <th>user</th>
+            <th>vehicle</th>
+            <th>plate</th>
+            <th>state</th>
+            <th>item</th>
+            <th>vendor-id</th>
+            <th>type</th>
+          </tr>
+          {car.map((item, index) => (
+            <tr key={index}>
+              <td>{item.username}</td>
+              <td>{item.vehiclename}</td>
+              <td>{item.plateno}</td>
+              <td>{item.state}</td>
+              <td>{item.item}</td>
+              <td>{item.id}</td>
+              <td>{item.type}</td>
+            </tr>
+          ))}
+        </tbody>
       </div>
     );
   }

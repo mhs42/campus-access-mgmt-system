@@ -60,39 +60,12 @@ const Access=()=> {
   }
   return (
     <div className="App">
-      <nav class="navbar navbar-light bg-light">
-        <span class="navbar-brand mb-0 h1">Campus Access Managment System</span>
-        <div>
-          <button class="btn btn-danger" onClick={lgout}>
-            Logout
-          </button>
-        </div>
-      </nav>
-      {/* <button onClick={lgout}>logout</button> */}
-      {/* <button onClick={rqst}>request-Visitor</button>
+      <button onClick={lgout}>logout</button>
+      <button onClick={rqst}>request-Visitor</button>
       <button onClick={rqst_v}>request-Vehicle</button>
-      <button onClick={v_rqst}>view-requests</button> */}
-      <div class="container p-1 my-3 bg-light w-60">
-        <div className="access mt-5">
-          <h4>{acc}</h4>
-        </div>
-        <div class="d-grid gap-2 d-md-block">
-          <div class="mt-4">
-            <button class="btn btn-primary w-50" type="button" onClick={rqst}>
-              request-Visitor
-            </button>
-          </div>
-          <div class="mt-2">
-            <button class="btn btn-primary w-50" type="button" onClick={rqst_v}>
-              request-Vehicle
-            </button>
-          </div>
-          <div class="mt-2">
-            <button class="btn btn-primary w-50" type="button" onClick={v_rqst}>
-              view-requests
-            </button>
-          </div>
-        </div>
+      <button onClick={v_rqst}>view-requests</button>
+      <div className="access">
+        <h1>{acc}</h1>
       </div>
     </div>
   );

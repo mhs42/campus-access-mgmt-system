@@ -58,42 +58,16 @@ function Vendorsearch() {
     }
   return (
     <div className="App">
-      <nav class="navbar navbar-light bg-light">
-        <span class="navbar-brand mb-0 h1">Campus Access Managment System</span>
-        <div>
-          <button class="btn btn-secondary" onClick={adm}>
-            admin-main
-          </button>
-
-          <button class="btn btn-outline-danger" onClick={lgout}>
-            Logout
-          </button>
-        </div>
-      </nav>
-      {/* <button onClick={lgout}>logout</button>
-      <button onClick={adm}>admin-main</button> */}
+        <button onClick={lgout}>logout</button>
+        <button onClick={adm}>admin-main</button>
       <div className="Login">
-        <div class="container p-1 my-3 bg-light w-60">
-          <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 my-5">
-            <h4>Vendor Search</h4>
-            <label>ID</label>
-            <input
-              type="text"
-              onChange={(e) => {
-                setusr(e.target.value);
-              }}
-              class="form-control form-control-lg"
-              placeholder="Search by ID"
-            />
-            <div class="text-center text-lg-start mt-4 pt-2">
-            <button class="btn btn-primary btn-lg" onClick={reg}>
-              Search
-            </button>
-            {/* <button onClick={reg}>search</button> */}
-            <h3>{ite}</h3>
-          </div>
-          </div>
-        </div>
+        <h1>VENDOR-SEARCH</h1>
+        <label>id</label>
+        <input type="text" onChange = {(e)=>{setusr(e.target.value)}} />
+      </div>
+      <div>
+        <button onClick={reg}>search</button>
+        <h3>{ite}</h3>
       </div>
     </div>
   );
