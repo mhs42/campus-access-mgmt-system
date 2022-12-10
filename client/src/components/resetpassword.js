@@ -37,19 +37,66 @@ function Reset() {
 }
   return (
     <div className="App">
-      <button onClick={login}>login</button>
-      <button onClick={signup}>signup</button>
-      <div className="Reset">
-        <h1>RESET PASSWORD</h1>
-        <label>username</label>
-        <input type="text" onChange = {(e)=>{setusr(e.target.value)}} />
-        <label>password</label>
-        <input type="password" onChange = {(e)=>{setpass(e.target.value)}}/>
-        <label>newpassword</label>
-        <input type="password" onChange = {(e)=>{setnewpass(e.target.value)}}/>
-      </div>
-      <div>
+      <nav class="navbar navbar-light bg-light">
+        <span class="navbar-brand mb-0 h1">Campus Access Managment System</span>
+        <div>
+          <button class="btn btn-success" onClick={login}>
+            Login
+          </button>
+          <button class="btn btn-outline-success" onClick={signup}>
+            Signup
+          </button>
+        </div>
+      </nav>
+      <div class="container p-1 my-3 bg-light w-60">
+        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 my-5">
+          {/* <button onClick={login}>login</button>
+      <button onClick={signup}>signup</button> */}
+          <div className="Reset">
+            <h2>RESET PASSWORD</h2>
+            <div class="form-outline mb-4">
+              {/* <label>username</label> */}
+              <input
+                type="text"
+                onChange={(e) => {
+                  setusr(e.target.value);
+                }}
+                class="form-control form-control-lg"
+                placeholder="Enter Username"
+              />
+            </div>
+            <div class="form-outline mb-4">
+              {/* <label>password</label> */}
+              <input
+                type="password"
+                onChange={(e) => {
+                  setpass(e.target.value);
+                }}
+                class="form-control form-control-lg"
+                placeholder="Enter password"
+              />
+            </div>
+            <div class="form-outline mb-4">
+              {/* <label>newpassword</label> */}
+              <input
+                type="password"
+                onChange={(e) => {
+                  setnewpass(e.target.value);
+                }}
+                class="form-control form-control-lg"
+                placeholder="Enter new password"
+              />
+            </div>
+          </div>
+          {/* <div>
         <button onClick={reg}>reset</button>
+      </div> */}
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button class="btn btn-primary btn-lg" onClick={reg}>
+              Reset
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

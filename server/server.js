@@ -38,6 +38,7 @@ function seedData(query)
     });
 }
 
+
 const con = mysql.createConnection(
     {
         host:process.env.host,
@@ -266,6 +267,9 @@ app.post('/vendorsearch', async (req,res)=>{
     const s = await query(`select items from Ztt5Nb4KuO.vendors where id=${usr}`);
     // const s2 = await query(`select user	vehicle	plate state	item vendor-id from Ztt5Nb4KuO.vendors,Ztt5Nb4KuO.vehicles from Ztt5Nb4KuO.vehicles where item!="NULL" and item=%${}%`);
     console.log("s: ",s);
+    if(s.length == 0){
+        return res.json({data:''});    
+    }
     return res.json({data:s[0].items});
 })
 
@@ -557,7 +561,7 @@ app.post('/visitor', async (req,res)=>{
         return res.json({status: "error", error: "Please enter all the data"});
     }
     if(!decoded.name || decoded.name == "admin"){
-        return res.json({status: "error", error: "login correctly to access"});
+        return res.json({status: "error1", error: "login correctly to access"});
     }
     if(isNaN(noc) || noc.length!=13){
         return res.json({ status: "error", error: "Only 13 digit cnic is allowed"});
@@ -589,7 +593,7 @@ app.post('/vehicle', async (req,res)=>{
         return res.json({status: "error", error: "Please enter all the data"});
     }
     if(!decoded.name || decoded.name == "admin"){
-        return res.json({status: "error", error: "login correctly to access"});
+        return res.json({status: "error1", error: "login correctly to access"});
     }
     let x = 0;
     if(no.includes("-")){

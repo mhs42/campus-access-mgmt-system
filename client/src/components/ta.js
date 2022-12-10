@@ -63,15 +63,36 @@ const Ta=(props)=> {
       }
 
     return (
-        <div className="App">
-        <button onClick={lgout}>logout</button>
+      <div className="App">
+        <nav class="navbar navbar-light bg-light">
+          <span class="navbar-brand mb-0 h1">
+            Campus Access Managment System
+          </span>
+          <div>
+            <button class="btn btn-secondary" onClick={v_rqst}>
+              view-requests-admin
+            </button>
+            <button class="btn btn-secondary" onClick={v_admin}>
+              admin
+            </button>
+            
+            <button class="btn btn-outline-danger" onClick={lgout}>
+              Logout
+            </button>
+          </div>
+        </nav>
+        {/* <button onClick={lgout}>logout</button>
         <button onClick={v_rqst}>view-requests-admin</button>
-        <button onClick={v_admin}>admin</button>
+        <button onClick={v_admin}>admin</button> */}
+        <div class="col-xl-10 offset-xl-1">
+        <div class="mt-5"></div>
+        <h4>TAs</h4>
+        <table class="table table-striped">
         <tbody>
           <tr>
-            <th>username</th>
-            <th>ta name</th>
-            <th>state</th>
+            <th>Username</th>
+            <th>TA name</th>
+            <th>State</th>
           </tr>
           {ta.map((item, index) => (
             <tr key={index}>
@@ -81,6 +102,8 @@ const Ta=(props)=> {
             </tr>
           ))}
         </tbody>
+        </table>
+        </div>
       </div>
     );
   }
