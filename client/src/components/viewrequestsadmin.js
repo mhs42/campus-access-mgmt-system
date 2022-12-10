@@ -154,52 +154,113 @@ const Viewrequestsadmin=()=> {
 
   return (
     <div className="App">
-      <button onClick={lgout}>logout</button>
-      <button onClick={adm}>admin-main</button>
-      <h1>VISITORS REQUESTS</h1>
-      <tbody>
-        <tr>
-          <th>user</th>
-          <th>visitor</th>
-          <th>cnic</th>
-          <th>state</th>
-          <th>change</th>
-          <th>delete</th>
-        </tr>
-        {admin.map((item, index) => (
-          <tr key={index}>
-            <td>{item.username}</td>
-            <td>{item.visitorname}</td>
-            <td>{item.cnic}</td>
-            <td>{item.state}</td>
-            <td><button data-index={[item.username,item.state,item.cnic]} onClick={reg}>change</button></td>
-            <td><button data-index={[item.username,item.state,item.cnic]} onClick={reg1}>delete</button></td>
-          </tr>
-        ))}
-      </tbody>
-      <h1>VEHICLES REQUESTS</h1>
-      <tbody>
-        <tr>
-          <th>user</th>
-          <th>vehicle</th>
-          <th>plate</th>
-          <th>state</th>
-          {/* <th>item</th> */}
-          <th>change</th>
-          <th>delete</th>
-        </tr>
-        {veh.map((item, index) => (
-          <tr key={index}>
-            <td>{item.username}</td>
-            <td>{item.vehiclename}</td>
-            <td>{item.plateno}</td>
-            <td>{item.state}</td>
-            {/* <td>{item.item}</td> */}
-            <td><button data-index={[item.username,item.vehiclename,item.plateno,item.state]} onClick={regg}>change</button></td>
-            <td><button data-index={[item.username,item.vehiclename,item.plateno,item.state]} onClick={regg1}>delete</button></td>
-          </tr>
-        ))}
-      </tbody>
+      <nav class="navbar navbar-light bg-light">
+        <span class="navbar-brand mb-0 h1">Campus Access Managment System</span>
+        <div>
+          <button class="btn btn-outline-danger" onClick={lgout}>
+            Logout
+          </button>
+          <button class="btn btn-secondary" onClick={adm}>
+            Admin-main
+          </button>
+        </div>
+      </nav>
+      {/* <button onClick={lgout}>logout</button>
+      <button onClick={adm}>admin-main</button> */}
+      <div class="col-xl-10 offset-xl-1">
+        <div class="mt-5"></div>
+        <h4>Visitors Requests</h4>
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th>user</th>
+              <th>visitor</th>
+              <th>cnic</th>
+              <th>state</th>
+              <th>change</th>
+              <th>delete</th>
+            </tr>
+            {admin.map((item, index) => (
+              <tr key={index}>
+                <td>{item.username}</td>
+                <td>{item.visitorname}</td>
+                <td>{item.cnic}</td>
+                <td>{item.state}</td>
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    data-index={[item.username, item.state, item.cnic]}
+                    onClick={reg}
+                  >
+                    change
+                  </button>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    data-index={[item.username, item.state, item.cnic]}
+                    onClick={reg1}
+                  >
+                    delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div class="mt-5"></div>
+        <h4>Vehicles Requests</h4>
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th>user</th>
+              <th>vehicle</th>
+              <th>plate</th>
+              <th>state</th>
+              {/* <th>item</th> */}
+              <th>change</th>
+              <th>delete</th>
+            </tr>
+            {veh.map((item, index) => (
+              <tr key={index}>
+                <td>{item.username}</td>
+                <td>{item.vehiclename}</td>
+                <td>{item.plateno}</td>
+                <td>{item.state}</td>
+                {/* <td>{item.item}</td> */}
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    data-index={[
+                      item.username,
+                      item.vehiclename,
+                      item.plateno,
+                      item.state,
+                    ]}
+                    onClick={regg}
+                  >
+                    change
+                  </button>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    data-index={[
+                      item.username,
+                      item.vehiclename,
+                      item.plateno,
+                      item.state,
+                    ]}
+                    onClick={regg1}
+                  >
+                    delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
