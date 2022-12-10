@@ -36,17 +36,27 @@ const Ta=(props)=> {
       async function fetchTA() {
         try {
           console.log("In try");
-          console.log("location.state.id: ",location.state.id);
           const token = localStorage.getItem("token");
           let instance = Axios.create({
             headers: { "x-access-token": token },
           });
-          console.log("reached here");
+          console.log("reached here: ", location.state.id);
           let response = await instance.post('http://localhost:5000/ta', {
           usrname: location.state.id,
           h: "haha",
         })
+        console.log(response);
+        if (response.data.status === "error") {
+          alert(response.data.error);
+          window.location.href = "/login";
+        }
+        if (response.data.status === "nochanges") {
+          alert(response.data.error);
+          window.location.href = "/admin";
+        }
+        else{
           Setta(response.data.data);
+          }
         } catch (err) {
           alert(err);
         }

@@ -46,7 +46,11 @@ const Access=()=> {
         console.log("response.data.data: ",response.data.data);
         console.log("response.data: ",response.data)
         Setacc(response.data.data);
-      } 
+      }
+      else if (response.data.status === "error") {
+        alert(response.data.error);
+        window.location.href = "/login";
+      }
       else{
         alert(response.data.error);
       }

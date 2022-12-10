@@ -42,6 +42,7 @@ const Vehicle=()=> {
         else{
           console.log(response.data.status);
           alert(response.data.error);
+          window.location.href = "/login";
         }
       })
       } catch (err) {

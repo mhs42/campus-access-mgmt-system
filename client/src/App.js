@@ -13,7 +13,7 @@ import Resetpassword from "./components/resetpassword";
 import Ta from "./components/ta";
 import Facility from "./components/facility";
 import Vendor from "./components/vendor";
-// import Test from "./components/test"
+import Vendorsearch from "./components/vendorsearch"
 
 
 export default function App() {
@@ -57,6 +57,9 @@ export default function App() {
       </Routes>
       <Routes>
         <Route path="vendor" element={<Vendor/>} />
+      </Routes>
+      <Routes>
+        <Route path="vendorsearch" element={<Vendorsearch />} />
       </Routes>
       {/* <Routes>
         <Route path="test" element={<Test/>} />

@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 dotenv.config({path:".env"});
 const app = express();
 const jwt = require("jsonwebtoken");
-// const { it } = require("node:test");
+const { it } = require("node:test");
 app.use(express.json())
 app.use(cors())
 
@@ -202,6 +202,9 @@ app.get('/access', async (req,res)=>{
 
 app.get('/admin', async (req,res)=>{
     const token = req.headers["x-access-token"];
+    if(!token){
+        return res.json({ status: "error", error: "login first"});
+    }
     const decoded = jwt.verify(token, "talha");
     console.log("decoded: ",decoded.name);
     console.log("typeof decoded: ",typeof decoded.name);
@@ -215,30 +218,62 @@ app.get('/admin', async (req,res)=>{
 })
 
 
-app.get('/test', async (req,res)=>{
-    const s = await query(`select * from Ztt5Nb4KuO.users where occupation!='admin'`);
-    console.log("s: ",s);
-    return res.json({ data:s});
-})
+// app.get('/test', async (req,res)=>{
+//     const s = await query(`select * from Ztt5Nb4KuO.users where occupation!='admin'`);
+//     console.log("s: ",s);
+//     return res.json({ data:s});
+// })
 
 
-app.get('/vendor', async (req,res)=>{
+app.post('/vendor', async (req,res)=>{
     const token = req.headers["x-access-token"];
+    if(!token){
+        return res.json({ status: "error", error: "login first"});
+    }
     const decoded = jwt.verify(token, "talha");
     console.log("decoded: ",decoded.name);
     console.log("typeof decoded: ",typeof decoded.name);
     console.log("token: ",token);
     if(decoded.name != "admin"){
-        return res.json({ status: "error", error: "Only admin can visit this page"});
+        console.log("bye bye");
+        return res.json({ status: "error", error: "admin can visit this page only"});
     }
     const s = await query(`select * from Ztt5Nb4KuO.vendors`);
     const s1 = await query(`select * from Ztt5Nb4KuO.vehicles where item!="NULL"`);
+    // const s3 = await query(`select id from Ztt5Nb4KuO.vehicles,Ztt5Nb4KuO.vendors where LOCATE(item,items)`);
+    const s2 = await query(`select username,vehiclename,plateno,state,item,id,type from Ztt5Nb4KuO.vehicles,Ztt5Nb4KuO.vendors where item!="NULL" and LOCATE(item,items)`);
     console.log("s: ",s);
-    return res.json({ data:s, data1:s1});
+    console.log("s2: ",s2);
+    // console.log("s3: ",s3);
+    return res.json({ data:s, data1:s2});
+})
+
+
+app.post('/vendorsearch', async (req,res)=>{
+    const token = req.headers["x-access-token"];
+    if(!token){
+        return res.json({ status: "error", error: "login first"});
+    }
+    const decoded = jwt.verify(token, "talha");
+    console.log("decoded: ",decoded.name);
+    console.log("typeof decoded: ",typeof decoded.name);
+    console.log("token: ",token);
+    if(decoded.name != "admin"){
+        console.log("bye bye");
+        return res.json({ status: "error", error: "admin can visit this page only"});
+    }
+    const usr = req.body.usrname;
+    const s = await query(`select items from Ztt5Nb4KuO.vendors where id=${usr}`);
+    // const s2 = await query(`select user	vehicle	plate state	item vendor-id from Ztt5Nb4KuO.vendors,Ztt5Nb4KuO.vehicles from Ztt5Nb4KuO.vehicles where item!="NULL" and item=%${}%`);
+    console.log("s: ",s);
+    return res.json({data:s[0].items});
 })
 
 app.post('/ta', async (req,res)=>{
     const token = req.headers["x-access-token"];
+    if(!token){
+        return res.json({ status: "error", error: "login first"});
+    }
     const id = req.body.usrname;
     console.log(req.body);
     const decoded = jwt.verify(token, "talha");
@@ -247,7 +282,13 @@ app.post('/ta', async (req,res)=>{
     console.log("token: ",token);
     console.log("id: ",id);
     if(decoded.name != "admin"){
+        console.log("bye bye");
         return res.json({ status: "error", error: "Only admin can visit this page"});
+    }
+    const s1= await query(`select occupation from Ztt5Nb4KuO.users where username = '${id}'`);
+    console.log("s1: ",s1[0].occupation);
+    if(s1[0].occupation == "student" || s1[0].occupation == "staff"){
+        return res.json({ status: "nochanges", error: "No Tas available for this"});
     }
     const s = await query(`select * from Ztt5Nb4KuO.tas where username = '${id}'`);
     console.log("s: ",s);
@@ -521,6 +562,11 @@ app.post('/visitor', async (req,res)=>{
     if(isNaN(noc) || noc.length!=13){
         return res.json({ status: "error", error: "Only 13 digit cnic is allowed"});
     }
+    const  s= await query(`select * from Ztt5Nb4KuO.visitors where cnic = '${noc}'`);
+    console.log("s: ",s);
+    if(s.length != 0){
+        return res.json({ status: "error", error: "wrong cnic"});
+    }
     con.connect(async (err)=>{
         console.log("before seeding: ",decoded.name,visitor_name,noc);
         await seedData(`INSERT INTO Ztt5Nb4KuO.visitors (username,visitorname,cnic,state) VALUES ('${decoded.name}','${visitor_name}','${noc}','Not allowed')`);
@@ -545,6 +591,25 @@ app.post('/vehicle', async (req,res)=>{
     if(!decoded.name || decoded.name == "admin"){
         return res.json({status: "error", error: "login correctly to access"});
     }
+    let x = 0;
+    if(no.includes("-")){
+        const a = no.split("-");
+        console.log("a: ",a);
+        if(!isNaN(a[0]) || isNaN(a[1]) || a[0].length !=3 || a[1].length !=3){
+           x = 1;
+           console.log("here x: ",x);
+        }
+    }
+    else{
+        return res.json({status: "error", error: "plate no can be of the form abc-123"});
+    }
+    if(x ==1){
+        return res.json({status: "error", error: "plate no can be of the form abc-123"});
+    }
+    const car = await query(`select vehiclename,plateno from Ztt5Nb4KuO.vehicles where vehiclename='${vehicle_name}' and plateno='${no}'`);
+    if(car.length !=0){
+        return res.json({status: "error", error: "car already exists"});
+    }
     const o = await query(`select occupation from Ztt5Nb4KuO.users where username='${decoded.name}'`);
     console.log("o: ",o);
     let ite = "NULL";
@@ -560,15 +625,21 @@ app.post('/vehicle', async (req,res)=>{
 
 app.get('/viewrequests', async (req,res)=>{
     const token = req.headers["x-access-token"];
+    if(!token){
+        return res.json({status: "error", error: "login correctly to access"});
+    }
     const decoded = jwt.verify(token, "talha");
     console.log("decoded: ",decoded.name);
+    if(!decoded.name || decoded.name == "admin"){
+        return res.json({status: "error", error: "login correctly to access"});
+    }
     const s = await query(`select * from Ztt5Nb4KuO.visitors where username='${decoded.name}'`);
     const s1 = await query(`select * from Ztt5Nb4KuO.vehicles where username='${decoded.name}'`);
     const s2 = await query(`select * from Ztt5Nb4KuO.visitorfacilities where username='${decoded.name}'`);
     console.log("s: ",s);
     console.log("s1: ",s1);
     console.log("s2: ",s2);
-    return res.json({ data:s, data1: s1, data2: s2});
+    return res.json({status: "good", data:s, data1: s1, data2: s2});
 })
 
 

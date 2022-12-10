@@ -43,6 +43,7 @@ const Visitor=()=> {
         else{
           console.log(response.data.status);
           alert(response.data.error);
+          window.location.replace("/login");
         }
       })
       } catch (err) {

@@ -44,9 +44,9 @@ function Reset() {
         <label>username</label>
         <input type="text" onChange = {(e)=>{setusr(e.target.value)}} />
         <label>password</label>
-        <input type="password" onChange = {(e)=>{setpass(e.target.value)}}/>
+        <input type="text" onChange = {(e)=>{setpass(e.target.value)}}/>
         <label>newpassword</label>
-        <input type="password" onChange = {(e)=>{setnewpass(e.target.value)}}/>
+        <input type="text" onChange = {(e)=>{setnewpass(e.target.value)}}/>
       </div>
       <div>
         <button onClick={reg}>reset</button>

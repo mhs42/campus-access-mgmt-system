@@ -139,8 +139,14 @@ const Viewrequestsadmin=()=> {
         headers: { "x-access-token": token },
       });
       let response = await instance.get('http://localhost:5000/viewrequestsadmin');
-      Setadmin(response.data.data);
-      Setveh(response.data.data1);
+      if (response.data.status === "error") {
+        alert(response.data.error);
+        window.location.href = "/viewrequestsadmin";
+      }
+      else{
+        Setadmin(response.data.data);
+        Setveh(response.data.data1);
+      }
     } catch (err) {
       alert(err);
     }

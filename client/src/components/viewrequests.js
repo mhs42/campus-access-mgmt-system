@@ -36,6 +36,10 @@ const Viewrequests=()=> {
         headers: { "x-access-token": token },
       });
       let response = await instance.get('http://localhost:5000/viewrequests');
+      if(response.data.status == "error"){
+        alert(response.data.error)
+        window.location.href = "/login";
+      }
       Setadmin(response.data.data);
       Setveh(response.data.data1);
       Setfac(response.data.data2);

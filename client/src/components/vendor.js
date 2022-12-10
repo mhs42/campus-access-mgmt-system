@@ -41,10 +41,17 @@ const Vendor=(props)=> {
           let instance = Axios.create({
             headers: { "x-access-token": token },
           });
-          let response = await instance.get('http://localhost:5000/vendor');
-          console.log("response.data.data[0]: ",response.data.data[0]);
+          let response = await instance.post('http://localhost:5000/vendor');
+          // console.log("response.data.data[0]: ",response.data.data[0]);
+          console.log(response);
+          if(response.data.status == "error"){
+              alert(response.data.error)
+              window.location.href = "/login";
+          }
+          else{
           Setvendor(response.data.data);
           Setcar(response.data.data1);
+          }
         } catch (err) {
           alert(err);
         }
@@ -78,6 +85,8 @@ const Vendor=(props)=> {
             <th>plate</th>
             <th>state</th>
             <th>item</th>
+            <th>vendor-id</th>
+            <th>type</th>
           </tr>
           {car.map((item, index) => (
             <tr key={index}>
@@ -86,6 +95,8 @@ const Vendor=(props)=> {
               <td>{item.plateno}</td>
               <td>{item.state}</td>
               <td>{item.item}</td>
+              <td>{item.id}</td>
+              <td>{item.type}</td>
             </tr>
           ))}
         </tbody>

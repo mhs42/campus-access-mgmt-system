@@ -15,12 +15,31 @@ import { Link, useNavigate } from "react-router-dom";
     window.location.href = "/viewrequestsadmin";
   }
 
+  const ven_rqst =(data) =>{
+    window.location.replace("/vendor");
+  }
+
+  const ven_check =(data) =>{
+    window.location.replace("/vendorsearch");
+  }
+
   const fetchUsers = async () => {
-    const { data } = await Axios.get(
-      "http://localhost:5000/test"
+    console.log("In try");
+      const token = localStorage.getItem("token");
+      let instance = Axios.create({
+        headers: { "x-access-token": token },
+      });
+    const { data } = await instance.get(
+      "http://localhost:5000/admin"
     );
     console.log("data: ", data);
-    return data;
+    if(data.status == "error"){
+      alert(data.error);
+      window.location.href = "/login";
+    }
+    else{
+      return data;
+    }
   };
 
 export default function App() {
@@ -155,6 +174,8 @@ export default function App() {
     <>
     <button onClick={lgout}>logout</button>
     <button onClick={adm}>view-requests</button>
+    <button onClick={ven_rqst}>view-vendors</button>
+    <button onClick={ven_check}>vendors-search</button>
       <Search
         onChange={e => setSearchVal(e.target.value)}
         placeholder="Search"
